@@ -55,6 +55,7 @@ class HomeController extends Controller
         $this->validate($request, $rules->toArray());
 
         $currentUser = \Auth::user();
+        $answers = [];
         foreach ($questions as $question){
             $answer = $request->input('input-' . $question->id);
             Answer::create(
@@ -64,6 +65,13 @@ class HomeController extends Controller
                     'user_id' => $currentUser->id
                 ]
             );
+
+            \Log::info('Respuesta creada:' . json_encode([
+                    'user' => $currentUser,
+                    'question' => $question,
+                    'answer' => $answer
+                ]));
+
         }
 
         return view('success');
